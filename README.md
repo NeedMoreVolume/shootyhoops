@@ -1,0 +1,2 @@
+# shootyhoops
+Discord basketball bot
