@@ -3,10 +3,10 @@ package ncaa
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/NeedMoreVolume/shootyhoops/models"
-	"github.com/NeedMoreVolume/shootyhoops/models/espn"
 	"io/ioutil"
 	"net/http"
+	"shootyhoops/models"
+	"shootyhoops/models/espn"
 	"strings"
 	"time"
 )

@@ -1,3 +1,5 @@
+github.com/NeedMoreVolume/shootyhoops v0.0.0-20201227091207-630a3f77ef85 h1:Lzi4wds5LvddOk6dpMlvTrncNuCv8O2uAeFcCaVA3Gg=
+github.com/NeedMoreVolume/shootyhoops v0.0.0-20201227091207-630a3f77ef85/go.mod h1:hmIsEQAEP8WGDqWngom58K4DbesjbW5+epHvQmxPeNw=
 github.com/bwmarrin/discordgo v0.22.0 h1:uBxY1HmlVCsW1IuaPjpCGT6A2DBwRn0nvOguQIxDdFM=
 github.com/bwmarrin/discordgo v0.22.0/go.mod h1:c1WtWUGN6nREDmzIpyTp/iD3VYt4Fpx+bVyfBG7JE+M=
 github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
