@@ -35,7 +35,7 @@ func main() {
 	dg.AddHandler(handler.BaseHandler)
 
 	// make channel to catch CTRL-C or other term signals
-	fmt.Println("shootyhoops is now raining buckets.  Press CTRL-C to make it do the epic Rockets-Warriors meltdown and go ice cold from downtown.")
+	fmt.Println("shootyhoops is now raining buckets.  Press CTRL-C (or send a term signal of your choice) to make it do the epic Rockets-Warriors meltdown and go ice cold from downtown.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc

@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"shootyhoops/handlers/avatar"
 	"shootyhoops/handlers/help"
 	"shootyhoops/handlers/nba"
 	"shootyhoops/handlers/ncaa"
@@ -43,6 +44,17 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 		response = ncaa.Games(message)
 	case strings.HasPrefix(message, "ncaa-standings"):
 		response = ncaa.Standings(message)
+	case strings.HasPrefix(message, "set-avatar"):
+		response = avatar.GetAvatar(message)
+		err := h.setAvatar(s, ,avatar.GetAvatar(message))
+		// Now lets format our base64 image into the proper format Discord wants
+		// and then call UserUpdate to set it as our user's Avatar.
+		newAvatar := fmt.Sprintf("data:%s;base64,%s", contentType, base64img)
+		_, err := s.UserUpdate("", "", "", newAvatar, "")
+		if err != nil {
+			fmt.Println(err)
+		}
+		return
 	}
 
 	if len(response) > 2000 {
@@ -55,6 +67,15 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 		fmt.Println(err)
 	}
 	return
+}
+
+func (h *Handler) setAvatar(s *discordgo.Session, contentType, newAvatar string) error {
+	fmtedAvatar := fmt.Sprintf("data:%s;base64,%s", contentType, newAvatar)
+	_, err := s.UserUpdate("", "", "", fmtedAvatar, "")
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (h *Handler) sendBulkResponse(s *discordgo.Session, m *discordgo.MessageCreate, message string) {
