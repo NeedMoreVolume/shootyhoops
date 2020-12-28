@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"github.com/NeedMoreVolume/shootyhoops/models/espn"
+	"shootyhoops/models/espn"
 	"strings"
 	"time"
 )

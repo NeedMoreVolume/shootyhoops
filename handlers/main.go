@@ -2,14 +2,34 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/NeedMoreVolume/shootyhoops/handlers/help"
-	"github.com/NeedMoreVolume/shootyhoops/handlers/nba"
-	"github.com/NeedMoreVolume/shootyhoops/handlers/ncaa"
 	"github.com/bwmarrin/discordgo"
+	"shootyhoops/handlers/help"
+	"shootyhoops/handlers/nba"
+	"shootyhoops/handlers/ncaa"
 	"strings"
 )
 
-func BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+type Handler struct {
+	bot *discordgo.User
+}
+
+func NewHandler(b *discordgo.User) *Handler {
+	handler := &Handler{bot: b}
+	fmt.Println(handler.bot.Mention())
+	return handler
+}
+
+func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if h.isBotAuthor(m.Author) {
+		return
+	}
+
+	if !h.isBotMention(m.Mentions) {
+		return
+	}
+
+	m.Content = h.stripBotMention(m.Content)
+
 	message := m.Content
 	response := "unrecognized request..."
 	switch {
@@ -26,7 +46,7 @@ func BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if len(response) > 2000 {
-		BulkMessageHandler(s, m, response)
+		h.sendBulkResponse(s, m, response)
 		return
 	}
 
@@ -37,7 +57,7 @@ func BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	return
 }
 
-func BulkMessageHandler(s *discordgo.Session, m *discordgo.MessageCreate, message string) {
+func (h *Handler) sendBulkResponse(s *discordgo.Session, m *discordgo.MessageCreate, message string) {
 	split := strings.Split(message, "```")
 	var partialResponse string
 	for i, game := range split {
@@ -63,4 +83,29 @@ func BulkMessageHandler(s *discordgo.Session, m *discordgo.MessageCreate, messag
 		fmt.Println(err)
 	}
 	return
+}
+
+func (h *Handler) isBotAuthor(author *discordgo.User) bool {
+	return author.ID == h.bot.ID
+}
+
+func (h *Handler) isBotMention(mentions []*discordgo.User) bool {
+	for _, mention := range mentions {
+		if mention.Mention() == h.bot.Mention() {
+			return true
+		}
+	}
+	fmt.Println("bot not mentioned?")
+	return false
+}
+
+func (h *Handler) stripBotMention(message string) string {
+	if strings.HasPrefix(message, h.bot.Mention()) {
+		message = strings.Replace(message, h.bot.Mention(), "", 1)
+	}
+	botMention2 := strings.Replace(h.bot.Mention(), "@", "@!", 1) + " "
+	if strings.HasPrefix(message, botMention2) {
+		message = strings.Replace(message, botMention2, "", 1)
+	}
+	return message
 }

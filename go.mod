@@ -1,4 +1,4 @@
-module github.com/NeedMoreVolume/shootyhoops
+module shootyhoops
 
 go 1.15
 
