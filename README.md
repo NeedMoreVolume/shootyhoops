@@ -16,3 +16,4 @@ List of NCAA commands
 Supported flags - please use at the end of a command
 * -scores => adds score info to the games
 * -detailed => adds extra team info such as records (total, home, away and conference)
+* -team {teamname} => filters for a specific team (one word team name for now)

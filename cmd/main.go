@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
 	"os"
 	"os/signal"
 	"shootyhoops/handlers"
 	"syscall"
+
+	"github.com/NeedMoreVolume/shootyhoops/handlers"
+	"github.com/bwmarrin/discordgo"
 )
 
 func main() {
