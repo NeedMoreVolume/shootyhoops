@@ -9,9 +9,6 @@ import (
 	"shootyhoops/models/espn"
 	"strings"
 	"time"
-
-	"github.com/NeedMoreVolume/shootyhoops/models"
-	"github.com/NeedMoreVolume/shootyhoops/models/espn"
 )
 
 const nbaEspnScoreboardUrl = "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard"

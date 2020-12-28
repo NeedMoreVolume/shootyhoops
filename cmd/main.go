@@ -7,7 +7,6 @@ import (
 	"shootyhoops/handlers"
 	"syscall"
 
-	"github.com/NeedMoreVolume/shootyhoops/handlers"
 	"github.com/bwmarrin/discordgo"
 )
 
