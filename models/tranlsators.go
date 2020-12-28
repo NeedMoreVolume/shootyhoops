@@ -63,6 +63,8 @@ func eventToGame(event espn.Event) Game {
 		status = "In Progress"
 	case "STATUS_HALFTIME":
 		status = "Halftime"
+	case "STATUS_END_PERIOD":
+		status = "Period Ended"
 	default:
 		status = event.Status.Type.Name
 	}

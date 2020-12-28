@@ -16,7 +16,6 @@ type Handler struct {
 
 func NewHandler(b *discordgo.User) *Handler {
 	handler := &Handler{bot: b}
-	fmt.Println(handler.bot.Mention())
 	return handler
 }
 
@@ -45,14 +44,10 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 	case strings.HasPrefix(message, "ncaa-standings"):
 		response = ncaa.Standings(message)
 	case strings.HasPrefix(message, "set-avatar"):
-		response = avatar.GetAvatar(message)
-		err := h.setAvatar(s, ,avatar.GetAvatar(message))
-		// Now lets format our base64 image into the proper format Discord wants
-		// and then call UserUpdate to set it as our user's Avatar.
-		newAvatar := fmt.Sprintf("data:%s;base64,%s", contentType, base64img)
-		_, err := s.UserUpdate("", "", "", newAvatar, "")
+		err := avatar.SetAvatar(s, message)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println(err.Error())
+			_, _ = s.ChannelMessageSend(m.ChannelID, err.Error())
 		}
 		return
 	}
@@ -67,15 +62,6 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 		fmt.Println(err)
 	}
 	return
-}
-
-func (h *Handler) setAvatar(s *discordgo.Session, contentType, newAvatar string) error {
-	fmtedAvatar := fmt.Sprintf("data:%s;base64,%s", contentType, newAvatar)
-	_, err := s.UserUpdate("", "", "", fmtedAvatar, "")
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (h *Handler) sendBulkResponse(s *discordgo.Session, m *discordgo.MessageCreate, message string) {
@@ -116,7 +102,6 @@ func (h *Handler) isBotMention(mentions []*discordgo.User) bool {
 			return true
 		}
 	}
-	fmt.Println("bot not mentioned?")
 	return false
 }
 
