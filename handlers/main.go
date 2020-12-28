@@ -85,9 +85,11 @@ func (h *Handler) sendBulkResponse(s *discordgo.Session, m *discordgo.MessageCre
 		partialResponse += "```" + game + "```"
 	}
 	// send remaining chunk
-	_, err := s.ChannelMessageSend(m.ChannelID, partialResponse)
-	if err != nil {
-		fmt.Println(err)
+	if partialResponse != "" {
+		_, err := s.ChannelMessageSend(m.ChannelID, partialResponse)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 	return
 }

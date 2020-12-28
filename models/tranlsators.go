@@ -97,22 +97,16 @@ func GamesToMessage(games []Game, withRank bool, detailed bool, scores bool) str
 
 	for _, game := range games {
 		out += "```"
+		out += FormatGameTitle(game.Home, game.Away, withRank)
 		if detailed {
-			out += FormatGameTitle(game.Home, game.Away, withRank)
 			out += FormatTeamDetail(game.Home)
 			out += FormatTeamDetail(game.Away)
-			out += FormatStartTime(game.Time.Local().Format(time.Kitchen))
-			out += FormatStatus(game.Status)
-		} else if scores {
-			out += FormatGameTitle(game.Home, game.Away, withRank)
-			out += FormatStartTime(game.Time.Local().Format(time.Kitchen))
-			out += FormatStatus(game.Status)
-			out += FormatGameScore(game.Home, game.Away)
-		} else {
-			out += FormatGameTitle(game.Home, game.Away, withRank)
-			out += FormatStartTime(game.Time.Local().Format(time.Kitchen))
-			out += FormatStatus(game.Status)
 		}
+		if scores {
+			out += FormatGameScore(game.Home, game.Away)
+		}
+		out += FormatStartTime(game.Time.Local().Format(time.Kitchen))
+		out += FormatStatus(game.Status)
 		out += "```"
 	}
 
@@ -154,5 +148,5 @@ func FormatStatus(status string) string {
 }
 
 func FormatGameScore(home Team, away Team) string {
-	return fmt.Sprintf("Scores: %s - %s", home.Score, away.Score)
+	return fmt.Sprintf("Scores: %s - %s\n", home.Score, away.Score)
 }
