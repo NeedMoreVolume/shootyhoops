@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/NeedMoreVolume/shootyhoops/handlers"
-	"github.com/bwmarrin/discordgo"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"github.com/NeedMoreVolume/shootyhoops/handlers"
+	"github.com/bwmarrin/discordgo"
 )
 
 var botUser *discordgo.User
