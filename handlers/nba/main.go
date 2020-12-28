@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"shootyhoops/models"
+	"shootyhoops/models/espn"
 	"strings"
 	"time"
 
