@@ -27,24 +27,16 @@ func Games(message string) string {
 		scores = true
 	}
 
-	var teamName string
+	var teamName *string
 	if strings.Contains(message, "-team") {
-		split := strings.Split(message, " ")
+		teamSplit := strings.Split(message, "-team")
+		split := strings.Split(teamSplit[1], " ")
 		message = strings.Replace(message, "-team", "", 1)
 
-		teamIndex := 0
-		for i := range split {
-			if split[i] != "-team" {
-				continue
-			}
-
-			teamIndex = i
-			break
-		}
-
 		// assign team name and remove from main message
-		teamName = split[teamIndex+1]
-		message = strings.Replace(message, teamName, "", 1)
+		tn := split[1]
+		message = strings.Replace(message, tn, "", 1)
+		teamName = &tn
 	}
 
 	message = strings.TrimSpace(message)
@@ -87,38 +79,7 @@ func Games(message string) string {
 		return "@NeedMoreVolume, either you are a dumbass or the espn response changed."
 	}
 
-	// filter for specific team if requested
-	if teamName != "" {
-		gamesData.Events = FilterTeams(gamesData.Events, teamName)
-	}
-	return models.GamesToMessage(models.EspnGamesToGames(gamesData), false, detailed, scores)
-}
-
-func FilterTeams(events []espn.Event, teamName string) []espn.Event {
-	filteredEvents := []espn.Event{}
-	for i := range events {
-		var breakout bool
-		competitors := events[i].Competitions[0].Competitors
-		for j := range competitors {
-			// todo: this needs to be more concise to avoid false positives
-			// i.e. 'nets' also returning 'hornets'
-			// use a regex identifier to do it probs
-			espnName := strings.ToLower(competitors[j].Team.DisplayName)
-			if !strings.Contains(espnName, strings.ToLower(teamName)) {
-				continue
-			}
-
-			filteredEvents = append(filteredEvents, events[i])
-			breakout = true
-			break
-		}
-
-		if breakout {
-			break
-		}
-	}
-
-	return filteredEvents
+	return models.GamesToMessage(models.EspnGamesToGames(gamesData), false, detailed, scores, teamName)
 }
 
 func Standings(message string) string {

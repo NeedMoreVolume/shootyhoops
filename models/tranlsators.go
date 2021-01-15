@@ -88,8 +88,17 @@ func EspnGamesToGames(response espn.GameResponse) []Game {
 	return out
 }
 
-func GamesToMessage(games []Game, withRank bool, detailed bool, scores bool) string {
+func GamesToMessage(games []Game, withRank bool, detailed bool, scores bool, team *string) string {
 	var out string
+
+	if team != nil {
+		// check if this games set has this team.
+		games = FilterTeams(games, *team)
+
+		if len(games) < 1 {
+			return fmt.Sprintf("Sorry, I can't find any games for the %s on the provided date.", strings.Title(strings.ToLower(*team)))
+		}
+	}
 
 	if len(games) < 1 {
 		return "Sorry, I can't find any games for the provided date."
@@ -111,6 +120,25 @@ func GamesToMessage(games []Game, withRank bool, detailed bool, scores bool) str
 	}
 
 	return out
+}
+
+func FilterTeams(games []Game, teamName string) []Game {
+	var filteredGames []Game
+	for _, game := range games {
+		// if teamName is home team, add game and break
+		if strings.Contains(game.Home.Name, strings.Title(strings.ToLower(teamName))) {
+			filteredGames = append(filteredGames, game)
+			break
+		}
+
+		// if teamName is away team, add game and break
+		if strings.Contains(game.Away.Name, strings.Title(strings.ToLower(teamName))) {
+			filteredGames = append(filteredGames, game)
+			break
+		}
+	}
+
+	return filteredGames
 }
 
 func FormatGameTitle(home Team, away Team, withRank bool) string {

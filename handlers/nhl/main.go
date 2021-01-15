@@ -1,4 +1,4 @@
-package ncaa
+package nhl
 
 import (
 	"encoding/json"
@@ -11,8 +11,9 @@ import (
 	"time"
 )
 
-const ncaaEspnScoreboardUrl = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
-const ncaaEspnStandingsUrl = "https://site.api.espn.com/apis/v2/sports/basketball/mens-college-basketball/standings"
+const nhlEspnScoreboardUrl = "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard"
+
+//const nhlEspnStandingsUrl = "https://site.api.espn.com/apis/v2/sports/basketball/mens-college-basketball/standings"
 
 func Games(message string) string {
 	var detailed bool
@@ -59,7 +60,7 @@ func Games(message string) string {
 		}
 	}
 
-	url := ncaaEspnScoreboardUrl + "?dates=" + query
+	url := nhlEspnScoreboardUrl + "?dates=" + query
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", url, nil)
 	resp, err := client.Do(req)
@@ -81,36 +82,4 @@ func Games(message string) string {
 	}
 
 	return models.GamesToMessage(models.EspnGamesToGames(gamesData), true, detailed, scores, teamName)
-}
-
-func Standings(message string) string {
-	url := ncaaEspnStandingsUrl
-	client := &http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
-	resp, err := client.Do(req)
-	if err != nil {
-		return "@NeedMoreVolume, please fix me. I've fallen and I can't get the ncaa game data."
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "@NeedMoreVolume, what the fuck man this isn't a readable body, who the fuck did you tell me to talk to for game data?"
-	}
-
-	var standingsData espn.StandingResponse
-	err = json.Unmarshal(body, &standingsData)
-	if err != nil {
-		fmt.Println(err.Error())
-		return "@NeedMoreVolume, either you are a dumbass or the espn response changed."
-	}
-
-	messageSplit := strings.Split(message, " ")
-	if len(messageSplit) > 1 {
-		switch messageSplit[1] {
-		case "big10":
-			// only get big10 standings data
-		}
-	}
-	return "implementation not complete"
 }
