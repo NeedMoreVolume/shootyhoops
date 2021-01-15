@@ -13,6 +13,8 @@ import (
 func main() {
 	// get bot token
 	token := os.Getenv("DISCORD_TOKEN")
+	botOwner := os.Getenv("BOT_OWNER")
+	ownerUsername := os.Getenv("OWNER_USERNAME")
 
 	// initialize new discord session
 	dg, err := discordgo.New("Bot " + token)
@@ -29,7 +31,7 @@ func main() {
 	}
 
 	// initialize bot handlers
-	handler := handlers.NewHandler(dg.State.User)
+	handler := handlers.NewHandler(dg.State.User, botOwner, ownerUsername)
 
 	// mount the baseHandler
 	dg.AddHandler(handler.BaseHandler)

@@ -7,15 +7,22 @@ import (
 	"shootyhoops/handlers/help"
 	"shootyhoops/handlers/nba"
 	"shootyhoops/handlers/ncaa"
+	"shootyhoops/handlers/nhl"
 	"strings"
 )
 
 type Handler struct {
-	bot *discordgo.User
+	bot      *discordgo.User
+	owner    string
+	username string
 }
 
-func NewHandler(b *discordgo.User) *Handler {
-	handler := &Handler{bot: b}
+func NewHandler(b *discordgo.User, o string, u string) *Handler {
+	handler := &Handler{
+		bot:      b,
+		owner:    o,
+		username: u,
+	}
 	return handler
 }
 
@@ -43,6 +50,8 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 		response = ncaa.Games(message)
 	case strings.HasPrefix(message, "ncaa-standings"):
 		response = ncaa.Standings(message)
+	case strings.HasPrefix(message, "nhl-games"):
+		response = nhl.Games(message)
 	case strings.HasPrefix(message, "set-avatar"):
 		err := avatar.SetAvatar(s, message)
 		if err != nil {
@@ -50,6 +59,10 @@ func (h *Handler) BaseHandler(s *discordgo.Session, m *discordgo.MessageCreate) 
 			_, _ = s.ChannelMessageSend(m.ChannelID, err.Error())
 		}
 		return
+	}
+
+	if strings.Contains(response, h.username) {
+		response = strings.Replace(response, h.username, h.owner, 1)
 	}
 
 	if len(response) > 2000 {

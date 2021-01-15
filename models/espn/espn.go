@@ -81,38 +81,6 @@ type Competitor struct {
 		Abbreviation string `json:"abbreviation"`
 		DisplayValue string `json:"displayValue"`
 	} `json:"statistics"`
-	Leaders []struct {
-		Name             string `json:"name"`
-		DisplayName      string `json:"displayName"`
-		ShortDisplayName string `json:"shortDisplayName"`
-		Abbreviation     string `json:"abbreviation"`
-		Leaders          []struct {
-			DisplayValue string  `json:"displayValue"`
-			Value        float64 `json:"value"`
-			Athlete      struct {
-				ID          string `json:"id"`
-				FullName    string `json:"fullName"`
-				DisplayName string `json:"displayName"`
-				ShortName   string `json:"shortName"`
-				Links       []struct {
-					Rel  []string `json:"rel"`
-					Href string   `json:"href"`
-				} `json:"links"`
-				Headshot string `json:"headshot"`
-				Jersey   string `json:"jersey"`
-				Position struct {
-					Abbreviation string `json:"abbreviation"`
-				} `json:"position"`
-				Team struct {
-					ID string `json:"id"`
-				} `json:"team"`
-				Active bool `json:"active"`
-			} `json:"athlete"`
-			Team struct {
-				ID string `json:"id"`
-			} `json:"team"`
-		} `json:"leaders"`
-	} `json:"leaders"`
 	CuratedRank struct {
 		Current int `json:"current"`
 	} `json:"curatedRank"`
