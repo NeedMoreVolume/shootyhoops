@@ -116,7 +116,7 @@ func GamesToMessage(games []Game, withRank bool, detailed bool, scores bool, tea
 		}
 		out += FormatStartTime(game.Time.Local().Format(time.Kitchen))
 		out += FormatStatus(game.Status)
-		out += "```"
+		out += "```\n"
 	}
 
 	return out
@@ -143,8 +143,20 @@ func FilterTeams(games []Game, teamName string) []Game {
 
 func FormatGameTitle(home Team, away Team, withRank bool) string {
 	if withRank {
-		return fmt.Sprintf("%s %s (%d) v %s %s (%d)\n",
-			home.Location, home.Name, home.Rank, away.Location, away.Name, away.Rank)
+		switch {
+		case home.Rank < 26 && away.Rank < 26:
+			// both teams ranked
+			return fmt.Sprintf("%s %s (%d) v %s %s (%d)\n",
+				home.Location, home.Name, home.Rank, away.Location, away.Name, away.Rank)
+		case home.Rank > 25 && away.Rank < 26:
+			// home team not ranked, away team ranked
+			return fmt.Sprintf("%s %s v %s %s (%d)\n",
+				home.Location, home.Name, away.Location, away.Name, away.Rank)
+		case home.Rank < 26 && away.Rank > 25:
+			// home team ranked, away team not ranked
+			return fmt.Sprintf("%s %s (%d) v %s %s\n",
+				home.Location, home.Name, home.Rank, away.Location, away.Name)
+		}
 	}
 	return fmt.Sprintf("%s %s v %s %s\n",
 		home.Location, home.Name, away.Location, away.Name)

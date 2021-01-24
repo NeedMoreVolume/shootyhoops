@@ -95,7 +95,7 @@ func (h *Handler) sendBulkResponse(s *discordgo.Session, m *discordgo.MessageCre
 			continue
 		}
 		// add current game to response buffer
-		partialResponse += "```" + game + "```"
+		partialResponse += "```" + game + "```\n"
 	}
 	// send remaining chunk
 	if partialResponse != "" {
@@ -128,5 +128,6 @@ func (h *Handler) stripBotMention(message string) string {
 	if strings.HasPrefix(message, botMention2) {
 		message = strings.Replace(message, botMention2, "", 1)
 	}
+	message = strings.TrimSpace(message)
 	return message
 }
